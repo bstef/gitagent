@@ -62,8 +62,9 @@ export async function updateLyzrAgent(agentDir: string, agentId: string, options
   const apiKey = ensureLyzrAuth(options.apiKey);
 
   // Fetch existing agent to merge
+  const safeAgentId = encodeURIComponent(agentId);
   info(`Fetching existing agent ${agentId}...`);
-  const getResp = await fetch(`${LYZR_AGENT_BASE_URL}/v3/agents/${agentId}`, {
+  const getResp = await fetch(`${LYZR_AGENT_BASE_URL}/v3/agents/${safeAgentId}`, {
     headers: { 'x-api-key': apiKey },
   });
 
@@ -80,7 +81,7 @@ export async function updateLyzrAgent(agentDir: string, agentId: string, options
 
   info(`Updating agent "${payload.name}" (${agentId})...`);
 
-  const resp = await fetch(`${LYZR_AGENT_BASE_URL}/v3/agents/template/single-task/${agentId}`, {
+  const resp = await fetch(`${LYZR_AGENT_BASE_URL}/v3/agents/template/single-task/${safeAgentId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
